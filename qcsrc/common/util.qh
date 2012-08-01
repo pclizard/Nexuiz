@@ -1,0 +1,251 @@
+// a dummy macro that prevents the "hanging ;" warning
+#define ENDS_WITH_CURLY_BRACE
+
+#define ACCUMULATE_FUNCTION(func,otherfunc) \
+	#ifdef func \
+	void __merge__##otherfunc() { func(); otherfunc(); } \
+	#undef func \
+	#define func __merge__##otherfunc \
+	#else \
+	#define func otherfunc \
+	#endif
+
+// this returns a tempstring containing a copy of s with additional \n newlines added, it also replaces \n in the text with a real newline
+// NOTE: s IS allowed to be a tempstring
+string wordwrap(string s, float l);
+#ifndef MENUQC
+#ifndef CSQC
+void wordwrap_sprint(string s, float l);
+#endif
+#endif
+void wordwrap_cb(string s, float l, void(string) callback)
+
+float GameCommand_Generic(string cmd);
+// returns TRUE if handled, FALSE otherwise
+// uses tokenize on its argument!
+
+// iterative depth-first search, with fields that go "up", "down left" and "right" in a tree
+// for each element, funcPre is called first, then funcPre and funcPost for all its children, and funcPost last
+void depthfirst(entity start, .entity up, .entity downleft, .entity right, void(entity, entity) funcPre, void(entity, entity) funcPost, entity pass);
+
+float median(float a, float b, float c);
+
+// converts a number to a string with the indicated number of decimals
+// works for up to 10 decimals!
+string ftos_decimals(float number, float decimals);
+
+vector colormapPaletteColor(float c, float isPants);
+
+// unzone the string, and return it as tempstring. Safe to be called on string_null
+string fstrunzone(string s);
+
+// database (NOTE: keys are case sensitive)
+void db_save(float db, string filename);
+void db_dump(float db, string pFilename);
+float db_create();
+float db_load(string filename);
+void db_close(float db);
+string db_get(float db, string key);
+void db_put(float db, string key, string value);
+
+// stringbuffer loading/saving
+float buf_load(string filename);
+void buf_save(float buf, string filename);
+
+// modulo function
+#ifndef MENUQC
+float mod(float a, float b) { return a - (floor(a / b) * b); }   
+#endif
+
+string GametypeNameFromType(float g);
+#define TIME_TO_NTHS(t,n) floor((t) * (n) + 0.4)
+string mmsss(float t);
+string mmssss(float t);
+
+#define TIME_DECIMALS 2
+#define TIME_FACTOR 100
+#define TIME_ENCODED_TOSTRING(n) mmssss(n)
+#define RACE_RECORD "/race100record/"
+#define CTS_RECORD "/cts100record/"
+#define TIME_ENCODE(t) TIME_TO_NTHS(t, TIME_FACTOR)
+#define TIME_DECODE(n) ((n) / TIME_FACTOR)
+
+string ScoreString(float vflags, float value);
+
+vector cross(vector a, vector b);
+
+void compressShortVector_init();
+vector decompressShortVector(float data);
+float compressShortVector(vector vec);
+
+#ifndef MENUQC
+float CheckWireframeBox(entity forent, vector v0, vector dvx, vector dvy, vector dvz);
+#endif
+
+string fixPriorityList(string pl, float from, float to, float subtract, float complete);
+string swapInPriorityList(string order, float i, float j);
+
+float cvar_value_issafe(string s);
+
+void cvar_settemp(string pKey, string pValue);
+void cvar_settemp_restore();
+
+#ifndef MENUQC
+// modes: 0 = trust q3map2 (_mini images)
+//        1 = trust tracebox (_radar images)
+// in both modes, mapinfo's "size" overrides
+
+string mi_shortname;
+vector mi_min;
+vector mi_max;
+void get_mi_min_max(float mode);
+
+vector mi_picmin; // adjusted mins that map to the picture (square)
+vector mi_picmax; // adjusted maxs that map to the picture (square)
+vector mi_pictexcoord0; // texcoords of the image corners (after transforming, these are 2D coords too)
+vector mi_pictexcoord1; // texcoords of the image corners (after transforming, these are 2D coords too)
+vector mi_pictexcoord2; // texcoords of the image corners (after transforming, these are 2D coords too)
+vector mi_pictexcoord3; // texcoords of the image corners (after transforming, these are 2D coords too)
+void get_mi_min_max_texcoords(float mode);
+#endif
+
+#define FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(x) void reference_##x() { x = x; }
+
+float almost_equals(float a, float b);
+float almost_in_bounds(float a, float b, float c);
+
+float power2of(float e);
+float log2of(float x);
+
+string HEXDIGITS = "0123456789ABCDEF0123456789abcdef";
+#define HEXDIGIT_TO_DEC_RAW(d) (strstrofs(HEXDIGITS, (d), 0))
+#define HEXDIGIT_TO_DEC(d) ((HEXDIGIT_TO_DEC_RAW(d) | 0x10) - 0x10)
+#define DEC_TO_HEXDIGIT(d) (substring(HEXDIGITS, (d), 1))
+
+vector rgb_to_hsl(vector rgb);
+vector hsl_to_rgb(vector hsl);
+vector rgb_to_hsv(vector rgb);
+vector hsv_to_rgb(vector hsv);
+string rgb_to_hexcolor(vector rgb);
+
+float boxesoverlap(vector m1, vector m2, vector m3, vector m4);
+float boxinsidebox(vector smins, vector smaxs, vector bmins, vector bmaxs);
+
+typedef float(string s, vector size) textLengthUpToWidth_widthFunction_t;
+typedef float(string s) textLengthUpToLength_lenFunction_t;
+float textLengthUpToWidth(string theText, float maxWidth, vector size, textLengthUpToWidth_widthFunction_t tw);
+string textShortenToWidth(string theText, float maxWidth, vector size, textLengthUpToWidth_widthFunction_t tw);
+float textLengthUpToLength(string theText, float maxWidth, textLengthUpToLength_lenFunction_t tw);
+string textShortenToLength(string theText, float maxWidth, textLengthUpToLength_lenFunction_t tw);
+
+string getWrappedLine_remaining;
+string getWrappedLine(float w, vector size, textLengthUpToWidth_widthFunction_t tw);
+string getWrappedLineLen(float w, textLengthUpToLength_lenFunction_t tw);
+
+float isGametypeInFilter(float gt, float tp, string pattern);
+
+typedef void(float i1, float i2, entity pass) swapfunc_t; // is only ever called for i1 < i2
+typedef float(float i1, float i2, entity pass) comparefunc_t; // <0 for <, ==0 for ==, >0 for > (like strcmp)
+void shuffle(float n, swapfunc_t swap, entity pass);
+void heapsort(float n, swapfunc_t swap, comparefunc_t cmp, entity pass);
+
+string swapwords(string str, float i, float j);
+string shufflewords(string str);
+
+string substring_range(string s, float b, float e);
+
+vector solve_quadratic(float a, float b, float c);
+// solution 1 -> x
+// solution 2 -> y
+// z = 1 if a real solution exists, 0 if not
+// if no real solution exists, x contains the real part and y the imaginary part of the complex solutions x+iy and x-iy
+
+void check_unacceptable_compiler_bugs();
+
+float compressShotOrigin(vector v);
+vector decompressShotOrigin(float f);
+
+string rankings_reply, ladder_reply, lsmaps_reply, lsnewmaps_reply, maplist_reply; // cached replies
+string records_reply[10];
+
+float RandomSelection_totalweight;
+float RandomSelection_best_priority;
+entity RandomSelection_chosen_ent;
+float RandomSelection_chosen_float;
+string RandomSelection_chosen_string;
+void RandomSelection_Init();
+void RandomSelection_Add(entity e, float f, string s, float weight, float priority);
+
+vector healtharmor_maxdamage(float h, float a, float armorblock); // returns vector: maxdamage, armorideal, 1 if fully armored
+vector healtharmor_applydamage(float a, float armorblock, float damage); // returns vector: take, save, 0
+
+string getcurrentmod();
+
+#ifndef MENUQC
+#ifdef CSQC
+float ReadInt24_t();
+#else
+void WriteInt24_t(float dest, float val);
+#endif
+#endif
+
+// the NULL function
+const var void func_null(void); FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(func_null)
+const var string string_null;
+float float2range11(float f);
+float float2range01(float f);
+
+float gsl_ran_gaussian(float sigma);
+
+string car(string s); // returns first word
+string cdr(string s); // returns all but first word
+float matchacl(string acl, string str); // matches str against ACL acl (with entries +foo*, +foo, +*foo, +*foo*, and same with - for forbidding)
+float startsWith(string haystack, string needle);
+float startsWithNocase(string haystack, string needle);
+
+string get_model_datafilename(string mod, float skn, string fil); // skin -1 will return wildcard, mod string_null will also put wildcard there
+string get_model_parameters_modelname;
+float get_model_parameters_modelskin;
+string get_model_parameters_name;
+float get_model_parameters_species;
+string get_model_parameters_sex;
+float get_model_parameters_weight;
+float get_model_parameters_age;
+string get_model_parameters_desc;
+float get_model_parameters(string mod, float skn); // call with string_null to clear; skin -1 means mod is the filename of the txt file and is to be split
+
+// stupid stupid stupid FTEQCC has a max limit on macro sizes, let's work around by splitting the macro into two macros! :(
+#define HUD_Panel_GetName_Part2(id) \
+switch(id) {\
+	case HUD_PANEL_ENGINEINFO: panel_name = HUD_PANELNAME_ENGINEINFO; break; \
+	case HUD_PANEL_INFOMESSAGES: panel_name = HUD_PANELNAME_INFOMESSAGES; break; \
+} ENDS_WITH_CURLY_BRACE
+
+// Get name of specified panel id
+#define HUD_Panel_GetName(id) \
+switch(id) { \
+	case HUD_PANEL_WEAPONS: panel_name = HUD_PANELNAME_WEAPONS; break; \
+	case HUD_PANEL_AMMO: panel_name = HUD_PANELNAME_AMMO; break; \
+	case HUD_PANEL_POWERUPS: panel_name = HUD_PANELNAME_POWERUPS; break; \
+	case HUD_PANEL_HEALTHARMOR: panel_name = HUD_PANELNAME_HEALTHARMOR; break; \
+	case HUD_PANEL_NOTIFY: panel_name = HUD_PANELNAME_NOTIFY; break; \
+	case HUD_PANEL_TIMER: panel_name = HUD_PANELNAME_TIMER; break; \
+	case HUD_PANEL_RADAR: panel_name = HUD_PANELNAME_RADAR; break; \
+	case HUD_PANEL_SCORE: panel_name = HUD_PANELNAME_SCORE; break; \
+	case HUD_PANEL_RACETIMER: panel_name = HUD_PANELNAME_RACETIMER; break; \
+	case HUD_PANEL_VOTE: panel_name = HUD_PANELNAME_VOTE; break; \
+	case HUD_PANEL_MODICONS: panel_name = HUD_PANELNAME_MODICONS; break; \
+	case HUD_PANEL_PRESSEDKEYS: panel_name = HUD_PANELNAME_PRESSEDKEYS; break; \
+	case HUD_PANEL_CHAT: panel_name = HUD_PANELNAME_CHAT; break; \
+}\
+HUD_Panel_GetName_Part2(id)
+
+vector vec2(vector v);
+
+#ifndef MENUQC
+vector NearestPointOnBox(entity box, vector org);
+#endif
+
+float vercmp(string v1, string v2);
+
+float u8_strsize(string s);
