@@ -98,11 +98,11 @@ void Projectile_Draw()
 		{
 			
 			case PROJECTILE_GRENADE:
-				rot = '-750 0 0'; // forward
+				rot = '-750 0'; // forward
 				break;
 			
 			case PROJECTILE_GRENADE_BOUNCING:
-				rot = '0 0 0'; // sideways
+				rot = '0 -1000 0'; // sideways
 				break;
 			case PROJECTILE_HOOKBOMB:
 				rot = '1000 0 0'; // forward

@@ -368,7 +368,7 @@ void WinningConditionHelper()
 	entity sk;
 
 	s = GetGametype();
-	s = strcat(s, ":", autocvar_g_xonoticversion);
+	s = strcat(s, ":", autocvar_g_nexuizversion);
 	s = strcat(s, ":P", ftos(cvar_purechanges_count));
 	s = strcat(s, "::", GetPlayerScoreString(world, 1)); // make this 1 once we can, note: this doesn't contain any :<letter>
 

@@ -126,7 +126,7 @@ void PlayerJump (void)
 
 	if(autocvar_sv_jumpspeedcap_max != "")
 	{
-		// don't do jump speedcaps on ramps to preserve old xonotic ramjump style
+		// don't do jump speedcaps on ramps to preserve old nexuiz ramjump style
 		tracebox(self.origin + '0 0 0.01', self.mins, self.maxs, self.origin - '0 0 0.01', MOVE_NORMAL, self);
 
 		if(!(trace_fraction < 1 && trace_plane_normal_z < 0.98 && autocvar_sv_jumpspeedcap_max_disable_on_ramps))

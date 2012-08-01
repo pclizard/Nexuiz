@@ -1,5 +1,5 @@
 //***********************
-//QUAKE 3 ENTITIES - So people can play quake3 maps with the xonotic weapons
+//QUAKE 3 ENTITIES - So people can play quake3 maps with the nexuiz weapons
 //***********************
 
 // NOTE: for best experience, you need to swap MGs with SGs in the map or it won't have a MG

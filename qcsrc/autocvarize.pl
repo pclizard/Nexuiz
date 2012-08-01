@@ -141,7 +141,7 @@ for my $f(@files)
 
 if($ENV{AUTOCVARING_SVQC})
 {
-	for my $f(<menu/xonotic/*.c>)
+	for my $f(<menu/nexuiz/*.c>)
 	{
 		print STDERR "In file $f\n";
 		open my $fh, "<", $f;
