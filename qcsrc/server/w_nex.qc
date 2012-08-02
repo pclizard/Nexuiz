@@ -2,6 +2,9 @@
 REGISTER_WEAPON(NEX, w_nex, IT_CELLS, 7, WEP_FLAG_NORMAL | WEP_TYPE_HITSCAN, BOT_PICKUP_RATING_HIGH, "nex", "nex", "Nex");
 #else
 #ifdef SVQC
+.float nex_lasthit;
+.float nex_lasthit2;
+
 void SendCSQCNexBeamParticle(float charge) {
 	vector v;
 	v = WarpZone_UnTransformOrigin(WarpZone_trace_transform, trace_endpos);
@@ -62,10 +65,28 @@ void W_Nex_Attack (float issecondary)
     }
 
 	yoda = 0;
+	damage_goodhits = 0;
 	FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, mydmg, myforce, mymindist, mymaxdist, myhalflife, myforcehalflife, WEP_NEX);
 
 	if(yoda && flying)
 		AnnounceTo(self, "yoda");
+	
+	if(damage_goodhits && self.nex_lasthit) //two shots in a row
+		{
+			damage_goodhits = 0; //reset
+			self.nex_lasthit2 = 1; //set to 1 so that way a third shot can be detected
+			
+		}
+
+	if(damage_goodhits && self.nex_lasthit2) //three shots in a row
+		{
+			(AnnounceTo(self, "impressive"));
+				damage_goodhits = 0; // reset
+				self.nex_lasthit2 = 0; //set to 0 since we only want the announcement to occur when the player hits three Nex shots in a row
+		}
+	
+	self.nex_lasthit = damage_goodhits;
+
 
 	//beam and muzzle flash done on client
 	SendCSQCNexBeamParticle(charge);
@@ -188,7 +209,10 @@ float w_nex(float req)
 		precache_sound ("weapons/nexwhoosh3.wav");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_NEX);
+		{
+			weapon_setup(WEP_NEX);
+		}
+		
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_cells >= autocvar_g_balance_nex_primary_ammo;
 	else if (req == WR_CHECKAMMO2)
