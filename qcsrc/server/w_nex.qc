@@ -4,6 +4,7 @@ REGISTER_WEAPON(NEX, w_nex, IT_CELLS, 7, WEP_FLAG_NORMAL | WEP_TYPE_HITSCAN, BOT
 #ifdef SVQC
 .float nex_lasthit;
 .float nex_lasthit2;
+.float nex_hitcounter;
 
 void SendCSQCNexBeamParticle(float charge) {
 	vector v;
@@ -74,8 +75,12 @@ void W_Nex_Attack (float issecondary)
 	if(damage_goodhits && self.nex_lasthit) //two shots in a row
 		{
 			damage_goodhits = 0; //reset
-			self.nex_lasthit2 = 1; //set to 1 so that way a third shot can be detected
+			self.nex_hitcounter = 1; //set to 1 so that way a third shot can be detected
 			
+		}
+	else
+		{
+			self.nex_hitcounter = 0; //we don't want the announcement for hitting two shots, missing the next one, and then finally hitting a third one. We want three in a row
 		}
 
 	if(damage_goodhits && self.nex_lasthit2) //three shots in a row
@@ -83,9 +88,11 @@ void W_Nex_Attack (float issecondary)
 			(AnnounceTo(self, "impressive"));
 				damage_goodhits = 0; // reset
 				self.nex_lasthit2 = 0; //set to 0 since we only want the announcement to occur when the player hits three Nex shots in a row
+				self.nex_hitcounter = 0; // ^
 		}
 	
 	self.nex_lasthit = damage_goodhits;
+	self.nex_lasthit2 = self.nex_hitcounter;
 
 
 	//beam and muzzle flash done on client
