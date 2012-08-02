@@ -906,7 +906,7 @@ vector HUD_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 	float weapon_height = height * 2/3;
 	float weapon_width = sbwidth / weapon_cnt;
 
-	drawstring(pos, strcat("Accuracy stats (average ", ftos(average_accuracy), "%)"), hud_fontsize, '1 1 1', scoreboard_alpha_fg, DRAWFLAG_NORMAL);
+	drawstring(pos, strcat("Accuracy statistics (average ", ftos(average_accuracy), "%)"), hud_fontsize, '1 1 1', scoreboard_alpha_fg, DRAWFLAG_NORMAL);
 	pos_y += 1.25 * hud_fontsize_y;
 	vector tmp;
 	tmp_x = sbwidth;
@@ -1003,7 +1003,7 @@ vector HUD_DrawScoreboardAccuracyStats(vector pos, vector rgb, vector bg_size)
 	drawfont = hud_font;
 
 	if(weapons_with_stats)
-		average_accuracy = floor(average_accuracy / weapons_with_stats);
+		average_accuracy = floor(100 * average_accuracy / weapons_with_stats);
 
 	if(rows == 2)
 		pos_x -= weapon_width / 2;
