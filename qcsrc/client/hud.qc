@@ -3341,7 +3341,7 @@ void HUD_Notify (void)
 			}
 			else if(killnotify_deathtype[j] & HITTYPE_SECONDARY && w == WEP_SHOTGUN)
 			{
-				s = "notify_melee_shotgun";
+				s = "notify_shotgun_secondary";
 			}
 			else if(WEP_VALID(w))
 			{
