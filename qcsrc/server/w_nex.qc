@@ -71,12 +71,12 @@ void W_Nex_Attack (float issecondary)
 
 	if(yoda && flying)
 		AnnounceTo(self, "yoda");
-	
+
 	if(damage_goodhits && self.nex_lasthit) //two shots in a row
 		{
 			damage_goodhits = 0; //reset
 			self.nex_hitcounter = 1; //set to 1 so that way a third shot can be detected
-			
+
 		}
 	else
 		{
@@ -86,18 +86,19 @@ void W_Nex_Attack (float issecondary)
 	if(damage_goodhits && self.nex_lasthit2) //three shots in a row
 		{
 			(AnnounceTo(self, "impressive"));
+                imp_counter = imp_counter + 1;
 				damage_goodhits = 0; // reset
 				self.nex_lasthit2 = 0; //set to 0 since we only want the announcement to occur when the player hits three Nex shots in a row
 				self.nex_hitcounter = 0; // ^
 		}
-	
+
 	self.nex_lasthit = damage_goodhits;
 	self.nex_lasthit2 = self.nex_hitcounter;
 
 
 	//beam and muzzle flash done on client
 	SendCSQCNexBeamParticle(charge);
-	
+
 	// flash and burn the wall
 	if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 		Damage_DamageInfo(trace_endpos, mydmg, 0, 0, myforce * w_shotdir, WEP_NEX, self);
@@ -219,7 +220,7 @@ float w_nex(float req)
 		{
 			weapon_setup(WEP_NEX);
 		}
-		
+
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_cells >= autocvar_g_balance_nex_primary_ammo;
 	else if (req == WR_CHECKAMMO2)

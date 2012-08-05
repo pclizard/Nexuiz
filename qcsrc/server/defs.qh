@@ -557,7 +557,7 @@ void target_voicescript_clear(entity pl);
 .string target4;
 .float trigger_reverse;
 
-// Nexball 
+// Nexball
 .entity ballcarried; // Also used for keepaway
 .float metertime;
 float g_nexball_meter_period;
@@ -660,3 +660,4 @@ float serverflags;
 .float freezetag_frozen;
 .float freezetag_beginrevive_time;
 .float freezetag_revive_progress;
+.float imp_counter;

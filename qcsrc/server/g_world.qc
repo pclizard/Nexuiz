@@ -1599,8 +1599,15 @@ Exit deathmatch games upon conditions
 */
 void CheckRules_Player()
 {
-	if (gameover)	// someone else quit the game already
+	if (gameover) {	// someone else quit the game already
+	    if(imp_counter > 0)
+	    {
+        bprint("^2", ftos(imp_counter), "^7 impressives were hit this game.\n");
+        imp_counter = 0;
+	    }
+
 		return;
+		}
 
 	if(self.deadflag == DEAD_NO)
 		self.play_time += frametime;
@@ -2908,7 +2915,6 @@ void SV_Shutdown()
 
 	if(gameover > 1) // shutting down already?
 		return;
-
 	gameover = 2; // 2 = server shutting down
 
 	if(world_initialized > 0)
@@ -2950,3 +2956,6 @@ void SV_Shutdown()
 		print("NOTE: crashed before even initializing the world, not saving persistent data\n");
 	}
 }
+
+
+
