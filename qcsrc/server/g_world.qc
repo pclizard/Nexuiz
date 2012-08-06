@@ -1605,7 +1605,6 @@ void CheckRules_Player()
         bprint("^2", ftos(imp_counter), "^7 impressives were hit this game.\n");
         imp_counter = 0;
 	    }
-
 		return;
 		}
 

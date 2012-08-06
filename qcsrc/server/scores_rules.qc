@@ -202,3 +202,9 @@ void ScoreRules_keepaway()
 	ScoreInfo_SetLabel_PlayerScore(SP_KEEPAWAY_DROPS,		"drops",		SFL_LOWER_IS_BETTER);
 	ScoreRules_basics_end();
 }
+
+//Duel Mode
+void ScoreRules_duel()
+{
+    ScoreRules_basics(0, 0, 0, FALSE);
+}

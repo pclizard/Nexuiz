@@ -73,6 +73,7 @@ void runematch_init();
 void tdm_init();
 void nb_init();
 void entcs_init();
+void duel_init();
 
 void LogTeamchange(float player_id, float team_number, float type)
 {
@@ -103,6 +104,7 @@ void WriteGameCvars()
 	cvar_set("g_cts", ftos(g_cts));
 	cvar_set("g_freezetag", ftos(g_freezetag));
 	cvar_set("g_keepaway", ftos(g_keepaway));
+	cvar_set("g_duel", ftos(g_duel));
 }
 
 void ReadGameCvars()
@@ -132,6 +134,7 @@ void ReadGameCvars()
 		found += (g_cts = (!found && (prev != GAME_CTS) && cvar("g_cts")));
 		found += (g_freezetag = (!found && (prev != GAME_FREEZETAG) && cvar("g_freezetag")));
 		found += (g_keepaway = (!found && (prev != GAME_KEEPAWAY) && cvar("g_keepaway")));
+		found += (g_duel = (!found && (prev != GAME_DUEL) && cvar("g_duel")));
 //#NO AUTOCVARS END
 
 		if(found)
@@ -382,6 +385,14 @@ void InitGameplayMode()
 		MUTATOR_ADD(gamemode_keepaway);
 	}
 
+	if(g_duel)
+    {
+        game = GAME_DUEL;
+        gamemode_name = "Duel";
+        duel_init();
+    }
+
+
 	if(teams_matter)
 		entcs_init();
 
@@ -503,7 +514,7 @@ void PrintWelcomeMessage(entity pl)
 	ret_string = "";
 	MUTATOR_CALLHOOK(BuildMutatorsPrettyString);
 	modifications = ret_string;
-	
+
 	if(g_minstagib)
 		modifications = strcat(modifications, ", MinstaGib");
 	if(g_weaponarena)

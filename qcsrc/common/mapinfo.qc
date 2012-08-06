@@ -81,7 +81,7 @@ float MapInfo_Cache_Retrieve(string map)
 
 // GLOB HANDLING (for all BSP files)
 float _MapInfo_globopen;
-float _MapInfo_globcount; 
+float _MapInfo_globcount;
 float _MapInfo_globhandle;
 string _MapInfo_GlobItem(float i)
 {
@@ -151,7 +151,7 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures, float pFlagsRequi
 	}
 	MapInfo_count = j + 1;
 	MapInfo_ClearTemps();
-	
+
 	// sometimes the glob isn't sorted nicely, so fix it here...
 	heapsort(MapInfo_count, _MapInfo_FilterList_swap, _MapInfo_FilterList_cmp, world);
 
@@ -313,7 +313,11 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 				else if(v == "info_player_start")
 					++spawnpoints;
 				else if(v == "info_player_deathmatch")
-					++spawnpoints;
+                    		{
+                     			++spawnpoints;
+                     			MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_DUEL;
+                    		}
+
 				else if(v == "trigger_race_checkpoint")
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_RACE;
 				else if(v == "target_startTimer")
@@ -423,7 +427,7 @@ void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType, fl
 
 	if(load_default)
 		_MapInfo_Map_ApplyGametype(_MapInfo_GetDefault(pThisType), pWantedType, pThisType, FALSE);
-	
+
 	if(pWantedType == MAPINFO_TYPE_ASSAULT || pWantedType == MAPINFO_TYPE_ONSLAUGHT || pWantedType == MAPINFO_TYPE_RACE || pWantedType == MAPINFO_TYPE_CTS) // these modes don't use fraglimit
 	{
 		cvar_set("fraglimit", "0");
@@ -667,6 +671,7 @@ float MapInfo_Type_FromString(string t)
 	else if(t == "freezetag") 	return MAPINFO_TYPE_FREEZETAG;
 	else if(t == "keepaway") return MAPINFO_TYPE_KEEPAWAY;
 	else if(t == "all")     return MAPINFO_TYPE_ALL;
+	else if(t == "duel")    return MAPINFO_TYPE_DUEL;
 	else                    return 0;
 }
 
@@ -689,6 +694,7 @@ string MapInfo_Type_ToString(float t)
 	else if(t == MAPINFO_TYPE_FREEZETAG)       return "freezetag";
 	else if(t == MAPINFO_TYPE_KEEPAWAY)  	   return "keepaway";
 	else if(t == MAPINFO_TYPE_ALL)             return "all";
+	else if(t == MAPINFO_TYPE_DUEL)            return "duel";
 	else                                       return "";
 }
 
@@ -715,12 +721,12 @@ void _MapInfo_Parse_Settemp(string pFilename, string acl, float type, string s, 
 	o = strstrofs(s, "\"", 0);
 	if(o >= 0)
 		s = substring(s, 0, o);
-	
+
 	//   remove // comments
 	o = strstrofs(s, "//", 0);
 	if(o >= 0)
 		s = substring(s, 0, o);
-	
+
 	//   remove trailing spaces
 	while(substring(s, -1, 1) == " ")
 		s = substring(s, 0, -2);
@@ -1141,7 +1147,7 @@ float MapInfo_CurrentGametype()
 	else if(cvar("g_arena"))
 		return MAPINFO_TYPE_ARENA;
 	else if(cvar("g_ca"))
-		return MAPINFO_TYPE_CA; 
+		return MAPINFO_TYPE_CA;
 	else if(cvar("g_keyhunt"))
 		return MAPINFO_TYPE_KEYHUNT;
 	else if(cvar("g_onslaught"))
@@ -1156,6 +1162,8 @@ float MapInfo_CurrentGametype()
 		return MAPINFO_TYPE_FREEZETAG;
 	else if(cvar("g_keepaway"))
 		return MAPINFO_TYPE_KEEPAWAY;
+    else if (cvar("g_duel"))
+        return MAPINFO_TYPE_DUEL;
 	else
 		return MAPINFO_TYPE_DEATHMATCH;
 }
@@ -1199,6 +1207,7 @@ string MapInfo_GetGameTypeCvar(float t)
 		case MAPINFO_TYPE_FREEZETAG: return "g_freezetag";
 		case MAPINFO_TYPE_CTS: return "g_cts";
 		case MAPINFO_TYPE_KEEPAWAY: 		return "g_keepaway";
+		case MAPINFO_TYPE_DUEL: return "g_duel";
 		default: return "";
 	}
 }
@@ -1222,6 +1231,7 @@ void MapInfo_SwitchGameType(float t)
 	cvar_set("g_cts",        (t == MAPINFO_TYPE_CTS)             ? "1" : "0");
 	cvar_set("g_freezetag",  (t == MAPINFO_TYPE_FREEZETAG)       ? "1" : "0");
 	cvar_set("g_keepaway",   (t == MAPINFO_TYPE_KEEPAWAY)        ? "1" : "0");
+	cvar_set("g_duel",       (t == MAPINFO_TYPE_DUEL)            ? "1" : "0");
 }
 
 void MapInfo_LoadMap(string s)

@@ -14,7 +14,8 @@ float MAPINFO_TYPE_ONSLAUGHT		= 4096;
 float MAPINFO_TYPE_NEXBALL		= 8192;
 float MAPINFO_TYPE_FREEZETAG		= 16384;
 float MAPINFO_TYPE_KEEPAWAY	= 32768;
-float MAPINFO_TYPE_ALL			= 65535; // this has to include all above bits
+float MAPINFO_TYPE_DUEL = 65535
+float MAPINFO_TYPE_ALL			= 131070; // this has to include all above bits
 
 float MAPINFO_FEATURE_WEAPONS       = 1; // not defined for minstagib-only maps
 

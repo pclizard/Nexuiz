@@ -1539,7 +1539,7 @@ void ClientConnect (void)
 	playerdemo_init();
 
 	anticheat_init();
-	
+
 	race_PreSpawnObserver();
 
 	//if(g_domination)
@@ -2036,7 +2036,7 @@ void player_powerups (void)
 {
 	// add a way to see what the items were BEFORE all of these checks for the mutator hook
 	olditems = self.items;
-	
+
 	if((self.items & IT_USING_JETPACK) && !self.deadflag)
 	{
 		SoundEntity_StartSound(self, CHAN_PLAYER, "misc/jetpack_fly.wav", VOL_BASE, autocvar_g_jetpack_attenuation);
@@ -2052,7 +2052,7 @@ void player_powerups (void)
 
 	if(!self.modelindex || self.deadflag) // don't apply the flags if the player is gibbed
 		return;
-	
+
 	Fire_ApplyDamage(self);
 	Fire_ApplyEffect(self);
 
@@ -2158,7 +2158,7 @@ void player_powerups (void)
 		if (time < self.spawnshieldtime)
 			self.effects = self.effects | (EF_ADDITIVE | EF_FULLBRIGHT);
 	}
-	
+
 	MUTATOR_CALLHOOK(PlayerPowerups);
 }
 
@@ -2443,7 +2443,7 @@ void ShowRespawnCountdown()
 
 void LeaveSpectatorMode()
 {
-	if(isJoinAllowed()) {
+	if(isJoinAllowed() && duelnoJoin > 0) {
 		if(!teams_matter || autocvar_g_campaign || autocvar_g_balance_teams || (self.wasplayer && autocvar_g_changeteam_banned) || self.team_forced > 0) {
 			self.classname = "player";
 
@@ -3072,7 +3072,7 @@ void PlayerPostThink (void)
 
 	if(self.waypointsprite_attachedforcarrier)
 		WaypointSprite_UpdateHealth(self.waypointsprite_attachedforcarrier, '1 0 0' * healtharmor_maxdamage(self.health, self.armorvalue, autocvar_g_balance_armor_blockpercent));
-	
+
 	if(self.classname == "player" && self.deadflag == DEAD_NO && autocvar_r_showbboxes)
 	{
 		if(!self.showheadshotbbox)
@@ -3111,4 +3111,4 @@ void PlayerPostThink (void)
 	if(g_race)
 		dprint(sprintf("%f %.6f\n", time, race_GetFractionalLapCount(self)));
 	*/
-}
+} 
