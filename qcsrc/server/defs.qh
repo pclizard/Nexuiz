@@ -40,6 +40,7 @@ float g_pickup_respawntimejitter_medium;
 float g_pickup_respawntimejitter_long;
 float g_pickup_respawntimejitter_powerup;
 float g_jetpack;
+float g_duelspec;
 
 float sv_clones;
 float sv_gentle;
@@ -660,5 +661,6 @@ float serverflags;
 .float freezetag_frozen;
 .float freezetag_beginrevive_time;
 .float freezetag_revive_progress;
-float imp_counter;
-float duelnoJoin; //switch to allow/forbid people from joining.
+.float imp_counter;
+float duelJoin; //switch to allow/forbid people from joining.
+float testId;

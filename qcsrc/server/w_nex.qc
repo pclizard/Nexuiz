@@ -86,7 +86,7 @@ void W_Nex_Attack (float issecondary)
 	if(damage_goodhits && self.nex_lasthit2) //three shots in a row
 		{
 			(AnnounceTo(self, "impressive"));
-                imp_counter = imp_counter + 1;
+                self.imp_counter = self.imp_counter + 1;
 				damage_goodhits = 0; // reset
 				self.nex_lasthit2 = 0; //set to 0 since we only want the announcement to occur when the player hits three Nex shots in a row
 				self.nex_hitcounter = 0; // ^

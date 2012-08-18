@@ -1600,10 +1600,10 @@ Exit deathmatch games upon conditions
 void CheckRules_Player()
 {
 	if (gameover) {	// someone else quit the game already
-	    if(imp_counter > 0)
+	    if(self.imp_counter > 0)
 	    {
-        bprint("^2", ftos(imp_counter), "^7 impressives were hit this game.\n");
-        imp_counter = 0;
+        bprint(self.netname, " hit ^2", ftos(self.imp_counter), "^7 impressives.\n");
+        self.imp_counter = 0;
 	    }
 		return;
 		}

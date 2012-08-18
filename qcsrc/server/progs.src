@@ -173,6 +173,8 @@ monsters/monster_zombie.qc
 accuracy.qc
 csqcprojectile.qc
 
+duel.qc
+
 playerdemo.qc
 
 anticheat.qc

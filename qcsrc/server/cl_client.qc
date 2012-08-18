@@ -1526,9 +1526,16 @@ void ClientConnect (void)
 
 	if(player_count<0)
 	{
+
+
 		dprint("BUG player count is lower than zero, this cannot happen!\n");
 		player_count = 0;
 	}
+
+
+    if(g_duel)
+        testId = testId + 1;
+
 
 	PlayerScore_Attach(self);
 	ClientData_Attach();
@@ -2443,8 +2450,11 @@ void ShowRespawnCountdown()
 
 void LeaveSpectatorMode()
 {
-	if(isJoinAllowed() && duelnoJoin > 0) {
-		if(!teams_matter || autocvar_g_campaign || autocvar_g_balance_teams || (self.wasplayer && autocvar_g_changeteam_banned) || self.team_forced > 0) {
+
+	if(isJoinAllowed()) {
+
+
+            if(!teams_matter || autocvar_g_campaign || autocvar_g_balance_teams || (self.wasplayer && autocvar_g_changeteam_banned) || self.team_forced > 0) {
 			self.classname = "player";
 
 			if(autocvar_g_campaign || autocvar_g_balance_teams || autocvar_g_balance_teams_force)
@@ -2469,12 +2479,12 @@ void LeaveSpectatorMode()
 				stuffcmd(self,"menu_showteamselect\n");
 			return;
 		}
-	}
-	else {
-		//player may not join because of g_maxplayers is set
-		centerprint_atprio(self, CENTERPRIO_MAPVOTE, PREVENT_JOIN_TEXT);
-	}
+        }
 }
+
+
+
+
 
 /**
  * Determines whether the player is allowed to join. This depends on cvar
@@ -2483,6 +2493,16 @@ void LeaveSpectatorMode()
  * @return bool TRUE if the player is allowed to join, false otherwise
  */
 float isJoinAllowed() {
+
+	if(g_duel)
+	{
+	  if(autocvar_duelspec)
+            return FALSE;
+      else
+        return TRUE;
+    }
+	else
+	{
 	if(self.team_forced < 0)
 		return FALSE; // forced spectators can never join
 
@@ -2491,6 +2511,7 @@ float isJoinAllowed() {
 
 	local entity e;
 	local float currentlyPlaying;
+
 	FOR_EACH_REALPLAYER(e) {
 		if(e.classname == "player")
 			currentlyPlaying += 1;
@@ -2498,9 +2519,9 @@ float isJoinAllowed() {
 	if(currentlyPlaying < autocvar_g_maxplayers)
 		return TRUE;
 
-	return FALSE;
+    return FALSE;
+    }
 }
-
 /**
  * Checks whether the client is an observer or spectator, if so, he will get kicked after
  * g_maxplayers_spectator_blocktime seconds
@@ -3111,4 +3132,4 @@ void PlayerPostThink (void)
 	if(g_race)
 		dprint(sprintf("%f %.6f\n", time, race_GetFractionalLapCount(self)));
 	*/
-} 
+}
